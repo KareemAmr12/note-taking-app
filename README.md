@@ -1,6 +1,16 @@
-# Getting Started with Create React App
+# React Note Taking Project
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Key Features
+- Create new notes by clicking the green "New note" button.
+- Notes' data (title, body, and last update date/time) are automatically synced with the cloud.
+- Real-time synchronization (letter by letter) with the cloud.
+- Delete notes by clicking the "X" button located on the top right of every note.
+- Search for your notes by typing in the search bar:
+    - Real-time search.
+    - If input is located in any notes' title or body, it is returned.
+- Last update feature (real-time synchronization) specifying the date and time of the last note edit. 
 
 ## Available Scripts
 
