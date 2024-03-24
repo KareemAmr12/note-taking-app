@@ -10,7 +10,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
+
+.session-input {
+  position: absolute;
+  top: 15px;
+  right: 40px;
+}
+
 .notes-list {
   display: flex;
   flex-direction: row;

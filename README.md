@@ -2,27 +2,26 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting Started
+
+- Clone/download project files into your local computer.
+- In the project directory, run the following:
+  - `npm install` to install the required packages and files.
+  - `npm start` to run the app in the development mode.
+  - Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
 ## Key Features
+
 - Create new notes by clicking the green "New note" button.
 - Notes' data (title, body, and last update date/time) are automatically synced with the cloud.
 - Real-time synchronization (letter by letter) with the cloud.
 - Delete notes by clicking the "X" button located on the top right of every note.
 - Search for your notes by typing in the search bar:
-    - Real-time search.
-    - If input is located in any notes' title or body, it is returned.
-- Last update feature (real-time synchronization) specifying the date and time of the last note edit. 
+  - Real-time search.
+  - If input is located in any notes' title or body, it is returned.
+- Last update feature (real-time synchronization) specifying the date and time of the last note edit.
 
 ## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
 ### `npm test`
 

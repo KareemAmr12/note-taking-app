@@ -1,9 +1,19 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Note(props) {
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteBody, setNoteBody] = useState("");
   const [mentions, setMentions] = useState([]);
   const [showMentions, setShowMentions] = useState(false);
   const userMentionIndex = useRef(-2);
+
+  useEffect(() => {
+    function SetInititalValues() {
+      setNoteTitle(props.note.title);
+      setNoteBody(props.note.body);
+    }
+    SetInititalValues();
+  }, []);
 
   function HandleMentions(e) {
     if (e.target.value[e.target.value.length - 1] === "@" && !showMentions) {
@@ -64,12 +74,13 @@ export default function Note(props) {
         className="note-title"
         placeholder="Title"
         maxLength={18}
-        value={props.note.title}
+        value={noteTitle}
         onChange={(e) => {
+          setNoteTitle(e.target.value);
           props.HandleUpdateNote(
             props.note.id,
             e.target.value,
-            props.note.body,
+            noteBody,
             ChangeNoteDate()
           );
         }}
@@ -77,12 +88,13 @@ export default function Note(props) {
       <textarea
         className="note-body"
         placeholder="Start writing..."
-        value={props.note.body}
+        value={noteBody}
         onChange={(e) => {
+          setNoteBody(e.target.value);
           HandleMentions(e);
           props.HandleUpdateNote(
             props.note.id,
-            props.note.title,
+            noteTitle,
             e.target.value,
             ChangeNoteDate()
           );
@@ -107,14 +119,15 @@ export default function Note(props) {
           disabled={!showMentions}
           className="mention-list"
           onChange={(e) => {
-            const oldBody = props.note.body.slice(0, userMentionIndex.current);
+            const oldBody = noteBody.slice(0, userMentionIndex.current);
             const newBody = oldBody + e.target.value;
+            setNoteBody(newBody);
             userMentionIndex.current = -2;
             setShowMentions(false);
             setMentions([]);
             props.HandleUpdateNote(
               props.note.id,
-              props.note.title,
+              noteTitle,
               newBody,
               ChangeNoteDate()
             );

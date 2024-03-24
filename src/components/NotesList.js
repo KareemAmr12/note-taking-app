@@ -2,16 +2,33 @@ import { useState, useEffect, useRef } from "react";
 import Note from "./Note";
 
 export default function NotesList() {
-  const [noteList, setNoteList] = useState([]);
-  const secNoteList = useRef([]);
+  const [noteList, setNoteList] = useState([]); //holding notes to be displayed
+  const [session, setSession] = useState("react");
+  const secNoteList = useRef([]); //holding all notes
   const allUsers = useRef([]);
+  const [sessionUserInput, setSessionUserInput] = useState("react");
+  //const [searchInput, setSearchInput] = useState("");
+  const searchInput = useRef("");
   let nextKey = secNoteList.current.length;
 
-  function HandleSearchNotes(e) {
+  function debounce(func, delay) {
+    let timeoutId;
+
+    return function (...args) {
+      const context = this;
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(context, args);
+      }, delay);
+    };
+  }
+
+  function HandleSearchNotes() {
     const newNoteList = secNoteList.current.filter(
       (note) =>
-        note.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        note.body.toLowerCase().includes(e.target.value.toLowerCase())
+        note.title.toLowerCase().includes(searchInput.current.toLowerCase()) ||
+        note.body.toLowerCase().includes(searchInput.current.toLowerCase())
     );
 
     setNoteList(newNoteList);
@@ -30,13 +47,13 @@ export default function NotesList() {
         return note;
       }
     });
-    setNoteList(secNoteList.current);
+    HandleSearchNotes();
 
     let bodyAfterAdj = "=#=#NULL";
     const noteNewData = {
       body: bodyAfterAdj,
     };
-    const URL = "https://challenge.surfe.com/challengeREACT/notes/" + id;
+    const URL = "https://challenge.surfe.com/" + session + "/notes/" + id;
     try {
       const response = await fetch(URL, {
         method: "PUT",
@@ -56,11 +73,11 @@ export default function NotesList() {
       ...secNoteList.current,
       { id: nextKey, title: "", body: "", lastUpdated: "" },
     ];
-    setNoteList(secNoteList.current);
+    HandleSearchNotes();
     const noteNewData = {
       body: "=#=#",
     };
-    const URL = "https://challenge.surfe.com/challengeREACT/notes";
+    const URL = "https://challenge.surfe.com/" + session + "/notes";
     try {
       const response = await fetch(URL, {
         method: "POST",
@@ -89,13 +106,13 @@ export default function NotesList() {
         return note;
       }
     });
-    setNoteList(secNoteList.current);
+    HandleSearchNotes();
     let bodyAfterAdj = newTitle + "=#" + newBody + "=#" + newLastUpdated;
     const noteNewData = {
       body: bodyAfterAdj,
     };
 
-    const URL = "https://challenge.surfe.com/challengeREACT/notes/" + id;
+    const URL = "https://challenge.surfe.com/" + session + "/notes/" + id;
     try {
       const response = await fetch(URL, {
         method: "PUT",
@@ -109,6 +126,8 @@ export default function NotesList() {
       console.log(error);
     }
   }
+
+  const debouncedHandleUpdateNote = debounce(HandleUpdateNote, 500);
 
   useEffect(() => {
     const GetUsers = async () => {
@@ -136,7 +155,7 @@ export default function NotesList() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://challenge.surfe.com/challengeREACT/notes",
+          "https://challenge.surfe.com/" + session + "/notes",
           {
             method: "GET",
           }
@@ -161,15 +180,32 @@ export default function NotesList() {
       }
     };
     fetchData();
-  }, []);
+  }, [session]);
 
   return (
     <div>
+      <label className="session-input">
+        Current session username:{" "}
+        <input
+          placeholder="ex: test123"
+          style={{ width: 70 + "px" }}
+          maxLength={10}
+          onChange={(e) => {
+            setSessionUserInput(e.target.value);
+          }}
+        />{" "}
+        <button onClick={() => setSession(sessionUserInput)}>enter</button>
+      </label>
+
       <input
         placeholder="Search..."
         className="search-bar"
-        onChange={(e) => HandleSearchNotes(e)}
-      ></input>
+        value={searchInput.current}
+        onChange={(e) => {
+          searchInput.current = e.target.value;
+          HandleSearchNotes();
+        }}
+      />
       <div className="notes-list">
         {noteList.map((note) => {
           if (note.lastUpdated !== "NULL") {
@@ -178,7 +214,7 @@ export default function NotesList() {
                 key={note.id}
                 note={note}
                 HandleDeleteNote={HandleDeleteNote}
-                HandleUpdateNote={HandleUpdateNote}
+                HandleUpdateNote={debouncedHandleUpdateNote}
                 allUsers={allUsers}
               />
             );
