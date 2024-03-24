@@ -15,6 +15,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Create new notes by clicking the green "New note" button.
 - Notes' data (title, body, and last update date/time) are automatically synced with the cloud.
 - Real-time synchronization (letter by letter) with the cloud.
+- Ability to change the session (each session has its own notes/data).
 - Delete notes by clicking the "X" button located on the top right of every note.
 - Search for your notes by typing in the search bar:
   - Real-time search.
