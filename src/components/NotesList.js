@@ -187,9 +187,8 @@ export default function NotesList() {
       <label className="session-input">
         Current session username:{" "}
         <input
-          placeholder="ex: test123"
+          placeholder="react"
           style={{ width: 70 + "px" }}
-          maxLength={10}
           onChange={(e) => {
             setSessionUserInput(e.target.value);
           }}
